@@ -1,1 +1,0 @@
-import{j as a}from"./gestures.DyKucfI7.js";function r({as:x="div",className:s="",children:t}){return a.jsx(x,{className:`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${s}`.trim(),children:t})}export{r as C};
