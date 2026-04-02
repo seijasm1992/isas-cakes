@@ -1,0 +1,20 @@
+---
+import Footer from '../components/sections/Footer.jsx';
+import CakesGallery from '../components/sections/CakesGallery.jsx';
+import Navbar from '../components/layout/Navbar.jsx';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  cakesGallery,
+  footerContent,
+  navigationItems,
+  siteIdentity,
+} from '../content/siteContent';
+---
+
+<BaseLayout title="Isa's Cakes | Cakes Gallery">
+  <Navbar client:load items={navigationItems} identity={siteIdentity} />
+  <main id="main-content" class="pt-20 sm:pt-24">
+    <CakesGallery client:load content={cakesGallery} />
+  </main>
+  <Footer content={footerContent} identity={siteIdentity} />
+</BaseLayout>

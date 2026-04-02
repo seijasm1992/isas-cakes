@@ -7,11 +7,35 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "dev:clean": "rimraf node_modules/.vite .astro && astro dev",
+    "clean": "rimraf node_modules/.vite .astro",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint .",
+    "postinstall": "patch-package"
   },
   "dependencies": {
-    "astro": "^6.1.2"
+    "@astrojs/react": "^5.0.2",
+    "@astrojs/vercel": "^10.0.4",
+    "@eslint/js": "^9.39.4",
+    "@hookform/resolvers": "^5.2.2",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.3",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "framer-motion": "^12.38.0",
+    "globals": "^17.4.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-hook-form": "^7.72.0",
+    "resend": "^6.10.0",
+    "tailwindcss": "^4.2.2",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "patch-package": "^8.0.1",
+    "rimraf": "^6.1.3"
   }
 }
