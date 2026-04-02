@@ -32,6 +32,7 @@ export default function Hero({ slides, identity }) {
             key={activeSlide.id}
             src={activeSlide.image}
             alt={activeSlide.alt}
+            fetchpriority="high"
             className="absolute inset-0 h-full w-full object-cover"
             initial={{ opacity: 0.4, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}

@@ -10,52 +10,51 @@ import {
   quoteRequestSchema,
 } from '../../lib/quoteSchema';
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 14 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 280,
-      damping: 26,
-    },
-  },
-};
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.02,
-    },
+    transition: { staggerChildren: 0.04, delayChildren: 0.06 },
   },
 };
 
-const fieldClassName =
-  'min-h-10 rounded-[1rem] border border-[#efe3e1] bg-[#fffdfc] px-3.5 py-2.5 text-sm text-stone-900 shadow-[0_6px_18px_rgba(155,109,109,0.04)] outline-none transition placeholder:text-stone-400 focus:border-[#d7a9af] focus:bg-white focus:ring-3 focus:ring-[#f7dde1]';
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 340, damping: 30 },
+  },
+};
 
-const fieldErrorClassName =
-  'border-[#e8b7be] bg-[#fff8f8] focus:border-[#d88f9a] focus:ring-[#f5d7dc]';
+/* -- Compact field styles -- */
+const fieldBase =
+  'w-full rounded-lg border border-stone-200/80 bg-white px-3 py-1.5 text-[0.8125rem] leading-5 text-stone-800 shadow-none outline-none transition-all duration-150 placeholder:text-stone-400 focus:border-stone-400 focus:ring-1 focus:ring-stone-200 hover:border-stone-300';
 
-function Field({ error, id, label, hint, children }) {
+const fieldError =
+  'border-rose-300 bg-rose-50/40 focus:border-rose-400 focus:ring-rose-100';
+
+function Field({ error, id, label, hint, optional, children }) {
   const hintId = hint ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
 
   return (
-    <label className="flex flex-col gap-2" htmlFor={id}>
-      <span className="text-[0.92rem] font-semibold tracking-[-0.01em] text-stone-800">{label}</span>
+    <label className="flex flex-col gap-1" htmlFor={id}>
+      <span className="flex items-baseline gap-1">
+        <span className="text-[0.75rem] font-medium text-stone-600">{label}</span>
+        {optional ? (
+          <span className="text-[0.625rem] text-stone-400">optional</span>
+        ) : null}
+      </span>
       {children({ describedBy, invalid: Boolean(error) })}
-      {hint ? (
-        <span id={hintId} className="text-[0.78rem] leading-5 text-stone-500">
+      {hint && !error ? (
+        <span id={hintId} className="text-[0.6875rem] leading-3.5 text-stone-400">
           {hint}
         </span>
       ) : null}
       {error ? (
-        <span id={errorId} className="text-[0.82rem] font-medium leading-5 text-rose-700" role="alert">
+        <span id={errorId} className="text-[0.6875rem] font-medium leading-3.5 text-rose-600" role="alert">
           {error}
         </span>
       ) : null}
@@ -68,17 +67,8 @@ export default function BuildYourOwnCakePage() {
   const [submissionState, setSubmissionState] = useState({ status: 'idle', message: '' });
 
   const motionProps = useMemo(() => {
-    if (shouldReduceMotion) {
-      return {
-        initial: false,
-        animate: 'visible',
-      };
-    }
-
-    return {
-      initial: 'hidden',
-      animate: 'visible',
-    };
+    if (shouldReduceMotion) return { initial: false, animate: 'visible' };
+    return { initial: 'hidden', animate: 'visible' };
   }, [shouldReduceMotion]);
 
   const {
@@ -97,9 +87,7 @@ export default function BuildYourOwnCakePage() {
     try {
       const response = await fetch('/api/quote', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
       });
 
@@ -112,7 +100,7 @@ export default function BuildYourOwnCakePage() {
       reset(quoteRequestDefaults);
       setSubmissionState({
         status: 'success',
-        message: 'Your quote request was sent successfully. We will get back to you soon.',
+        message: "Quote sent! We'll get back to you soon.",
       });
     } catch (error) {
       setSubmissionState({
@@ -122,267 +110,160 @@ export default function BuildYourOwnCakePage() {
     }
   });
 
-  const inputClassName = (hasError) =>
-    `${fieldClassName} ${hasError ? fieldErrorClassName : ''}`.trim();
+  const cx = (hasError) => `${fieldBase} ${hasError ? fieldError : ''}`.trim();
 
   return (
     <LazyMotion features={domAnimation}>
       <m.div
-        className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-12 pt-22 sm:px-6 sm:pb-16 sm:pt-26 lg:px-8"
+        className="mx-auto w-full max-w-lg px-4 pb-12 pt-24 sm:px-5 sm:pt-28"
         variants={containerVariants}
         {...motionProps}
       >
-        <m.section
-          className="overflow-hidden rounded-[1.6rem] border border-[#f4e8e6] bg-[linear-gradient(145deg,#fffdfc,#fff8f7)] shadow-[0_18px_48px_rgba(84,54,60,0.08)]"
-          variants={sectionVariants}
+        {/* Header */}
+        <m.div className="mb-4 text-center" variants={itemVariants}>
+          <h1 className="text-xl font-semibold tracking-[-0.02em] text-stone-900 sm:text-2xl">
+            Request a custom cake
+          </h1>
+          <p className="mt-1 text-[0.8125rem] text-stone-500">
+            Tell us the basics — we'll reply with a quote within 24h.
+          </p>
+        </m.div>
+
+        {/* Form card */}
+        <m.div
+          className="overflow-hidden rounded-xl border border-stone-200/70 bg-white"
+          variants={itemVariants}
         >
-          <div className="flex flex-col lg:flex-row">
-            <div className="bg-[linear-gradient(160deg,#c9969d_0%,#ddb8bc_52%,#f0d9da_100%)] px-5 py-6 text-white sm:px-6 sm:py-7 lg:flex lg:w-[34%] lg:flex-col lg:justify-between">
-              <div>
-                <span className="inline-flex rounded-full border border-white/35 bg-white/20 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/90">
-                  Quote request
-                </span>
-                <h1 className="mt-3 max-w-sm text-2xl font-semibold leading-tight tracking-[-0.03em] text-balance sm:text-[2rem]">
-                  Share the basics and we will send your cake quote.
-                </h1>
-                <p className="mt-3 max-w-md text-sm leading-6 text-white/88">
-                  A shorter, clearer form with lighter styling and easier mobile scanning.
-                </p>
+          <form onSubmit={onSubmit} noValidate>
 
-                <div className="mt-5 rounded-[1.1rem] border border-white/30 bg-white/16 p-3 backdrop-blur-sm">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-white/70">Important</p>
-                  <p className="mt-1.5 text-sm font-medium text-white">
-                    We do not work with Beso de Angel Cakes.
-                  </p>
-                </div>
+            {/* About you */}
+            <div className="space-y-3 px-4 py-4 sm:px-5">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-stone-400">About you</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field id="quote-name" label="Name" error={errors.name?.message}>
+                  {({ describedBy, invalid }) => (
+                    <input id="quote-name" type="text" autoComplete="name" className={cx(errors.name)} placeholder="Full name" aria-invalid={invalid} aria-describedby={describedBy} {...register('name')} />
+                  )}
+                </Field>
+                <Field id="quote-email" label="Email" error={errors.email?.message}>
+                  {({ describedBy, invalid }) => (
+                    <input id="quote-email" type="email" autoComplete="email" className={cx(errors.email)} placeholder="name@example.com" aria-invalid={invalid} aria-describedby={describedBy} {...register('email')} />
+                  )}
+                </Field>
               </div>
-            </div>
-
-            <div className="px-5 py-6 sm:px-6 sm:py-7 lg:w-[66%]">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#bf8f96]">
-                Contact form
-              </p>
-              <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-stone-900 sm:text-2xl">
-                Request your custom quote
-              </h2>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-stone-500">
-                Tell us when it is, how many guests, your flavor idea, and the look you want.
-              </p>
-              <form className="mt-5 grid gap-4" onSubmit={onSubmit} noValidate>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field id="quote-name" label="Your name" error={errors.name?.message}>
+              <Field id="quote-phone" label="Phone" error={errors.phone?.message}>
                 {({ describedBy, invalid }) => (
-                  <input
-                    id="quote-name"
-                    type="text"
-                    autoComplete="name"
-                    className={inputClassName(errors.name)}
-                    placeholder="How should we address you?"
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('name')}
-                  />
-                )}
-              </Field>
-
-              <Field id="quote-email" label="Best email" error={errors.email?.message}>
-                {({ describedBy, invalid }) => (
-                  <input
-                    id="quote-email"
-                    type="email"
-                    autoComplete="email"
-                    className={inputClassName(errors.email)}
-                    placeholder="name@example.com"
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('email')}
-                  />
+                  <input id="quote-phone" type="tel" autoComplete="tel" className={`${cx(errors.phone)} sm:max-w-[48%]`} placeholder="(305) 555-0147" aria-invalid={invalid} aria-describedby={describedBy} {...register('phone')} />
                 )}
               </Field>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field id="quote-phone" label="Phone number" error={errors.phone?.message}>
-                {({ describedBy, invalid }) => (
-                  <input
-                    id="quote-phone"
-                    type="tel"
-                    autoComplete="tel"
-                    className={inputClassName(errors.phone)}
-                    placeholder="(305) 555-0147"
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('phone')}
-                  />
-                )}
-              </Field>
+            <hr className="border-stone-100" />
 
-              <Field id="quote-date" label="Event date" error={errors.eventDate?.message}>
-                {({ describedBy, invalid }) => (
-                  <input
-                    id="quote-date"
-                    type="date"
-                    className={inputClassName(errors.eventDate)}
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('eventDate')}
-                  />
-                )}
-              </Field>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field id="quote-servings" label="Guest count" error={errors.servings?.message}>
-                {({ describedBy, invalid }) => (
-                  <input
-                    id="quote-servings"
-                    type="text"
-                    className={inputClassName(errors.servings)}
-                    placeholder="Around 25 guests"
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('servings')}
-                  />
-                )}
-              </Field>
-
-              <Field id="quote-flavor" label="Flavor idea" error={errors.flavor?.message}>
-                {({ describedBy, invalid }) => (
-                  <input
-                    id="quote-flavor"
-                    type="text"
-                    className={inputClassName(errors.flavor)}
-                    placeholder="Vanilla, Nutella, strawberry filling..."
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('flavor')}
-                  />
-                )}
-              </Field>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Field id="quote-event-type" label="Occasion" error={errors.eventType?.message}>
-                {({ describedBy, invalid }) => (
-                  <select
-                    id="quote-event-type"
-                    className={inputClassName(errors.eventType)}
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('eventType')}
-                  >
-                    {eventTypes.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </Field>
-
+            {/* Event */}
+            <div className="space-y-3 px-4 py-4 sm:px-5">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-stone-400">Event</p>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <Field id="quote-event-type" label="Occasion" error={errors.eventType?.message}>
+                  {({ describedBy, invalid }) => (
+                    <select id="quote-event-type" className={cx(errors.eventType)} aria-invalid={invalid} aria-describedby={describedBy} {...register('eventType')}>
+                      {eventTypes.map((o) => <option key={o} value={o}>{o}</option>)}
+                    </select>
+                  )}
+                </Field>
+                <Field id="quote-date" label="Date" error={errors.eventDate?.message}>
+                  {({ describedBy, invalid }) => (
+                    <input id="quote-date" type="date" className={cx(errors.eventDate)} aria-invalid={invalid} aria-describedby={describedBy} {...register('eventDate')} />
+                  )}
+                </Field>
+                <Field id="quote-servings" label="Guests" error={errors.servings?.message}>
+                  {({ describedBy, invalid }) => (
+                    <input id="quote-servings" type="text" className={cx(errors.servings)} placeholder="~25" aria-invalid={invalid} aria-describedby={describedBy} {...register('servings')} />
+                  )}
+                </Field>
+                <Field id="quote-budget" label="Budget" error={errors.budget?.message}>
+                  {({ describedBy, invalid }) => (
+                    <select id="quote-budget" className={cx(errors.budget)} aria-invalid={invalid} aria-describedby={describedBy} {...register('budget')}>
+                      {budgetOptions.map((o) => <option key={o} value={o}>{o}</option>)}
+                    </select>
+                  )}
+                </Field>
+              </div>
               <Field id="quote-fulfillment" label="Pickup or delivery" error={errors.fulfillment?.message}>
                 {({ describedBy, invalid }) => (
-                  <select
-                    id="quote-fulfillment"
-                    className={inputClassName(errors.fulfillment)}
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('fulfillment')}
-                  >
-                    {deliveryOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </Field>
-
-              <Field id="quote-budget" label="Estimated budget" error={errors.budget?.message}>
-                {({ describedBy, invalid }) => (
-                  <select
-                    id="quote-budget"
-                    className={inputClassName(errors.budget)}
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    {...register('budget')}
-                  >
-                    {budgetOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
+                  <select id="quote-fulfillment" className={`${cx(errors.fulfillment)} sm:max-w-[48%]`} aria-invalid={invalid} aria-describedby={describedBy} {...register('fulfillment')}>
+                    {deliveryOptions.map((o) => <option key={o} value={o}>{o}</option>)}
                   </select>
                 )}
               </Field>
             </div>
 
-            <Field
-              id="quote-inspiration"
-              label="Inspiration link"
-              hint="Optional."
-              error={errors.inspirationLink?.message}
-            >
-              {({ describedBy, invalid }) => (
-                <input
-                  id="quote-inspiration"
-                  type="url"
-                  className={inputClassName(errors.inspirationLink)}
-                  placeholder="Paste a Pinterest or Instagram link"
-                  aria-invalid={invalid}
-                  aria-describedby={describedBy}
-                  {...register('inspirationLink')}
-                />
-              )}
-            </Field>
+            <hr className="border-stone-100" />
 
-            <Field
-              id="quote-details"
-              label="Design details"
-              hint="Colors, wording, theme, allergies, tiers, or delivery notes."
-              error={errors.details?.message}
-            >
-              {({ describedBy, invalid }) => (
-                <textarea
-                  id="quote-details"
-                  rows="5"
-                  className={`${inputClassName(errors.details)} min-h-32 resize-y rounded-[1.1rem]`}
-                  placeholder="Tell us the style, message on the cake, and any important details."
-                  aria-invalid={invalid}
-                  aria-describedby={describedBy}
-                  {...register('details')}
-                />
-              )}
-            </Field>
+            {/* Cake vision */}
+            <div className="space-y-3 px-4 py-4 sm:px-5">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-stone-400">Your cake</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field id="quote-flavor" label="Flavor idea" error={errors.flavor?.message}>
+                  {({ describedBy, invalid }) => (
+                    <input id="quote-flavor" type="text" className={cx(errors.flavor)} placeholder="Vanilla, Nutella…" aria-invalid={invalid} aria-describedby={describedBy} {...register('flavor')} />
+                  )}
+                </Field>
+                <Field id="quote-inspiration" label="Inspiration link" optional error={errors.inspirationLink?.message}>
+                  {({ describedBy, invalid }) => (
+                    <input id="quote-inspiration" type="url" className={cx(errors.inspirationLink)} placeholder="Pinterest / Instagram" aria-invalid={invalid} aria-describedby={describedBy} {...register('inspirationLink')} />
+                  )}
+                </Field>
+              </div>
+              <Field id="quote-details" label="Design details" hint="Colors, theme, tiers, wording, allergies." error={errors.details?.message}>
+                {({ describedBy, invalid }) => (
+                  <textarea id="quote-details" rows="3" className={`${cx(errors.details)} min-h-[4.5rem] resize-y`} placeholder="Describe the look you want…" aria-invalid={invalid} aria-describedby={describedBy} {...register('details')} />
+                )}
+              </Field>
+            </div>
 
-            <div className="flex flex-col gap-3 border-t border-[#f1e5e3] pt-4 sm:flex-row sm:items-center sm:justify-between">
-              <div aria-live="polite" aria-atomic="true" className="min-h-5 text-sm">
+            <hr className="border-stone-100" />
+
+            {/* Footer */}
+            <div className="flex flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div aria-live="polite" aria-atomic="true" className="min-h-4 text-[0.75rem]">
                 {submissionState.status === 'success' ? (
-                  <p className="rounded-full bg-emerald-50 px-3 py-1.5 text-[0.82rem] font-medium text-emerald-700">
-                    {submissionState.message}
-                  </p>
+                  <p className="font-medium text-emerald-700">{submissionState.message}</p>
                 ) : null}
                 {submissionState.status === 'error' ? (
-                  <p className="rounded-full bg-rose-50 px-3 py-1.5 text-[0.82rem] font-medium text-rose-700">
-                    {submissionState.message}
-                  </p>
+                  <p className="font-medium text-rose-600">{submissionState.message}</p>
                 ) : null}
               </div>
-
               <m.button
                 type="submit"
-                whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-                className="inline-flex min-h-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#d59da4,#c37e88)] px-4.5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(195,126,136,0.18)] transition hover:shadow-[0_16px_28px_rgba(195,126,136,0.22)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d9a5ad] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                whileHover={shouldReduceMotion ? undefined : { y: -1 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-stone-900 px-4 text-[0.75rem] font-semibold text-white transition hover:bg-stone-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending your request...' : 'Request my quote'}
+                {isSubmitting ? (
+                  <>
+                    <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" className="opacity-20" />
+                      <path d="M12 2a10 10 0 019.95 9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    </svg>
+                    Sending…
+                  </>
+                ) : 'Request quote'}
               </m.button>
             </div>
-              </form>
-            </div>
-          </div>
-        </m.section>
+          </form>
+        </m.div>
+
+        {/* Note + trust */}
+        <m.div className="mt-3 space-y-2 text-center" variants={itemVariants}>
+          <p className="text-[0.6875rem] text-stone-400">
+            <span className="text-amber-600">⚠</span>{' '}We do not work with Beso de Angel cakes.
+          </p>
+          <p className="text-[0.625rem] text-stone-400">
+            We typically respond within 24 hours · Your info stays private
+          </p>
+        </m.div>
       </m.div>
     </LazyMotion>
   );

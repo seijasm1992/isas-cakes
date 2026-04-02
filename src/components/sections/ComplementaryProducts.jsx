@@ -56,6 +56,7 @@ export default function ComplementaryProducts({ content }) {
                   <img
                     src={item.image}
                     alt={item.alt}
+                    loading="lazy"
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(0,0,0,0)_30%,_rgba(0,0,0,0.38)_100%)]" />

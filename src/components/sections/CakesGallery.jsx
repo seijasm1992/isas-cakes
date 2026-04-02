@@ -64,6 +64,7 @@ export default function CakesGallery({ content }) {
               <img
                 src={item.src}
                 alt={item.alt}
+                loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.04]"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(0,0,0,0)_10%,_rgba(0,0,0,0.22)_100%)] opacity-70 transition duration-300 group-hover:opacity-90" />

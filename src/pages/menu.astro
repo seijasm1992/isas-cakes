@@ -1,0 +1,64 @@
+---
+import Footer from '../components/sections/Footer.jsx';
+import Navbar from '../components/layout/Navbar.jsx';
+import MenuSection from '../components/sections/MenuSection.jsx';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { footerContent, navigationItems, siteIdentity, menuContent } from '../content/siteContent';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: "Cake Flavors & Menu — Isa's Cakes",
+    description:
+      'Explore our premium cake bases, delicious fillings, and signature flavor combinations. Vanilla, chocolate, red velvet, and more.',
+    url: 'https://isascakes.com/menu',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Menu',
+    name: "Isa's Cakes Menu",
+    description: 'Cake bases, fillings, extras, and signature flavor combinations.',
+    hasMenuSection: menuContent.categories.map((category) => ({
+      '@type': 'MenuSection',
+      name: category.title,
+      description: category.description,
+      hasMenuItem: category.items.map((item) => ({
+        '@type': 'MenuItem',
+        name: item.name,
+        description: item.description,
+      })),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://isascakes.com/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Menu',
+        item: 'https://isascakes.com/menu',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Cake Flavors & Menu | Isa's Cakes Miami"
+  description="Explore our premium cake bases, delicious fillings, and signature flavor combinations. Vanilla, chocolate, red velvet, and more."
+  schema={schema}
+>
+  <Navbar client:load items={navigationItems} identity={siteIdentity} />
+  <main id="main-content">
+    <MenuSection client:load content={menuContent} />
+  </main>
+  <Footer content={footerContent} identity={siteIdentity} />
+</BaseLayout>

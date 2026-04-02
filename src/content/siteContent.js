@@ -315,3 +315,71 @@ export const cakesGallery = {
     { id: 'cake-37', src: '/gallery/isas-cakes-zodiac-form-cake-blue-delicious.webp', alt: "Blue zodiac cake by Isa's Cakes", size: 'large' },
   ],
 };
+
+export const menuContent = {
+  header: {
+    eyebrow: 'Our Menu',
+    title: 'Flavors crafted for every celebration.',
+    description: 'We believe a beautiful cake should taste just as unforgettable. Mix and match our classic bases, fillings, and extras, or choose one of our signature combinations.',
+  },
+  categories: [
+    {
+      id: 'bases',
+      title: 'Cakes',
+      description: 'The foundation of every great cake. Baked fresh from scratch.',
+      items: [
+        { name: 'Vanilla', description: 'Classic, moist vanilla sponge cake.' },
+        { name: 'Chocolate', description: 'Deep, decadent chocolate cake with a tender crumb.' },
+        { name: 'Marbled', description: 'Perfect balance of vanilla and chocolate swirls.' },
+        { name: 'Orange', description: 'Bright, citrus-infused cake with fresh orange.' },
+        { name: 'Coconut', description: 'Tropical, tender coconut-infused sponge.' },
+        { name: 'Lemon', description: 'Light, zesty lemon sponge.' }
+      ]
+    },
+    {
+      id: 'fillings',
+      title: 'Fillings',
+      description: 'Smooth, creamy layers to complement your cake base.',
+      items: [
+        { name: 'Nutella', description: 'Rich chocolate hazelnut spread buttercream.' },
+        { name: 'Chocolate', description: 'Luxurious whipped chocolate filling.' },
+        { name: 'Vanilla', description: 'Silky, classic vanilla buttercream.' },
+        { name: 'Dulce de Leche', description: 'Rich, caramelized milk confection.' },
+        { name: 'Cream Cheese', description: 'Tangy and sweet cream cheese filling.' },
+        { name: 'Cookies and Cream', description: 'Crushed cookies folded into smooth cream.' },
+        { name: 'Passion Fruit Brigadier', description: 'Sweet and tart passion fruit reduction.' },
+        { name: 'Coconut Brigadier', description: 'Sweetened condensed milk and coconut truffle filling.' },
+        { name: 'Strawberry Buttercream', description: 'Smooth buttercream bursting with strawberry flavor.' }
+      ]
+    },
+    {
+      id: 'extras',
+      title: 'Extras',
+      description: 'Add an extra layer of texture and flavor to the filling.',
+      items: [
+        { name: 'Fresh Strawberries', description: 'Sliced fresh organic strawberries.' },
+        { name: 'Peaches', description: 'Sweet and juicy chopped peaches.' },
+        { name: 'Chocolate Chips', description: 'Semisweet chocolate morsels.' },
+        { name: 'Nuts', description: 'Toasted and crushed for added crunch.' },
+        { name: 'Oreos', description: 'Crushed chocolate sandwich cookies.' },
+        { name: 'Berry Jam', description: 'Sweet and tart house-made berry compote.' },
+        { name: 'Pineapple', description: 'Bright and tropical pineapple bits.' }
+      ]
+    },
+    {
+      id: 'specials',
+      title: 'Special Flavors',
+      description: 'Try something new! Our signature curated combinations.',
+      items: [
+        { name: 'Samba Love', description: 'Vanilla cake + strawberry cream + nutella + wafer cookies.' },
+        { name: 'Strawberry Cheesecake', description: 'Vanilla cake + cream cheese + organic strawberry jam + crumb crust.' },
+        { name: 'Birthday Cake', description: 'Vanilla cake with colorful sprinkles + vanilla buttercream filling.' },
+        { name: 'Snickers Obsession', description: 'Moist chocolate cake + cream cheese + salted caramel and peanut.' },
+        { name: 'Carrot', description: 'Carrot cake + cream cheese + walnut.' },
+        { name: 'Red Velvet', description: 'Red velvet cake + cream cheese.' },
+        { name: 'Berry Lemon Crush', description: 'Lemon cake + cream cheese filling + organic blueberry jam.' },
+        { name: 'White Paradise', description: 'Coconut cake + coconut brigadier + vanilla bean buttercream.' }
+      ]
+    }
+  ]
+};

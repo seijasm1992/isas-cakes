@@ -15,9 +15,48 @@ import {
   siteIdentity,
   topSkills,
 } from '../content/siteContent';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: "Isa's Cakes",
+    url: 'https://isascakes.com',
+    logo: siteIdentity.logoSrc,
+    description:
+      'Handcrafted custom designer cakes for celebrations in Miami. Premium designs with elegant finishes.',
+    areaServed: {
+      '@type': 'City',
+      name: 'Miami',
+    },
+    sameAs: ['https://www.instagram.com/isascakesusa'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: "Isa's Cakes",
+    url: 'https://isascakes.com',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://isascakes.com/',
+      },
+    ],
+  },
+];
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="Isa's Cakes | Custom Designer Cakes in Miami"
+  description="Handcrafted custom cakes for birthdays, weddings, and celebrations in Miami. Premium designs with elegant finishes. Get a free quote today."
+  schema={schema}
+>
   <Navbar client:load items={navigationItems} identity={siteIdentity} />
   <main id="main-content">
     <Hero client:load slides={heroSlides} identity={siteIdentity} />

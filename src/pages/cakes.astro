@@ -9,9 +9,54 @@ import {
   navigationItems,
   siteIdentity,
 } from '../content/siteContent';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: "Custom Cake Gallery — Isa's Cakes",
+    description:
+      'Browse our gallery of custom designer cakes — birthdays, weddings, themed celebrations. Each handcrafted with premium ingredients in Miami.',
+    url: 'https://isascakes.com/cakes',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    name: "Isa's Cakes — Custom Cake Gallery",
+    description: 'A curated bento gallery of custom designer cakes handcrafted in Miami.',
+    image: cakesGallery.items.slice(0, 10).map((item) => ({
+      '@type': 'ImageObject',
+      contentUrl: `https://isascakes.com${item.src}`,
+      description: item.alt,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://isascakes.com/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Cake Gallery',
+        item: 'https://isascakes.com/cakes',
+      },
+    ],
+  },
+];
 ---
 
-<BaseLayout title="Isa's Cakes | Cakes Gallery">
+<BaseLayout
+  title="Custom Cake Gallery | Isa's Cakes Miami"
+  description="Browse our gallery of custom designer cakes — birthdays, weddings, themed celebrations. Each handcrafted with premium ingredients in Miami."
+  image="/gallery/isas-cakes-corona-glitter-cake-pink-close-up.webp"
+  schema={schema}
+>
   <Navbar client:load items={navigationItems} identity={siteIdentity} />
   <main id="main-content" class="pt-20 sm:pt-24">
     <CakesGallery client:load content={cakesGallery} />

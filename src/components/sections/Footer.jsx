@@ -4,49 +4,53 @@ export default function Footer({ content, identity }) {
   return (
     <footer
       id="contact"
-      className="relative overflow-hidden bg-[#120f0f] py-16 text-white sm:py-20"
+      className="relative overflow-hidden bg-[linear-gradient(180deg,#1b1416_0%,#23191d_100%)] p-6 sm:py-8"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.06),_transparent_30%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.06),_transparent_40%)]" />
       <Container className="relative z-10">
-        <div className="grid gap-12 border-b border-white/10 pb-12 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="max-w-xl">
-            <a href="/" className="inline-flex items-center gap-4">
+        <div className="flex flex-col gap-8 border-b border-white/10 pb-6 lg:flex-row lg:justify-between">
+          
+          {/* Brand Info */}
+          <div className="max-w-sm">
+            <a href="/" className="inline-flex items-center gap-3">
               <img
                 src={identity.logoSrc}
                 alt={identity.logoAlt}
-                className="h-14 w-auto sm:h-16"
+                className="h-9 w-auto opacity-90"
               />
               <div>
-                <p className="text-sm uppercase tracking-[0.2em] text-white/48">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">
                   {content.socialHandle}
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
+                <p className="text-lg font-semibold tracking-tight text-white/95">
                   {content.brandName}
-                </h2>
+                </p>
               </div>
             </a>
 
-            <p className="mt-8 max-w-lg text-base leading-8 text-white/68 sm:text-lg">
+            <p className="mt-3 max-w-xs text-[0.8125rem] leading-[1.6] text-white/60">
               {content.brandStatement}
             </p>
 
-            <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-white/72">
+            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80 transition-colors hover:bg-white/10">
               <span aria-hidden="true">ES</span>
               <span>{content.languageLabel}</span>
             </div>
           </div>
 
-          <div className="grid gap-10 sm:grid-cols-2">
+          {/* Links Grid */}
+          <div className="grid gap-6 sm:grid-cols-[1fr_auto] lg:gap-12">
+            {/* Categories */}
             <div>
-              <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-white/52">
+              <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#f3d8b4]/70">
                 Designer Cakes
               </h3>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5">
                 {content.categoryLinks.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm leading-7 text-white/72 transition hover:text-white"
+                      className="text-[12px] leading-relaxed text-white/60 transition hover:text-[#ffe8cd]"
                     >
                       {link.label}
                     </a>
@@ -55,16 +59,17 @@ export default function Footer({ content, identity }) {
               </ul>
             </div>
 
+            {/* Navigation */}
             <div>
-              <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-white/52">
+              <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#f3d8b4]/70">
                 Navigation
               </h3>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-3 space-y-1.5">
                 {content.navigationLinks.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm leading-7 text-white/72 transition hover:text-white"
+                      className="text-[12px] leading-relaxed text-white/60 transition hover:text-[#ffe8cd]"
                     >
                       {link.label}
                     </a>
@@ -75,8 +80,9 @@ export default function Footer({ content, identity }) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 pt-6 text-sm text-white/44 sm:flex-row sm:items-center sm:justify-between">
-          <p>Designed for premium celebrations in Miami and Hialeah.</p>
+        {/* Bottom */}
+        <div className="flex flex-col gap-2 pt-4 text-[10px] uppercase tracking-wider text-white/40 sm:flex-row sm:items-center sm:justify-between">
+          <p>Handcrafted premium celebrations in Miami and Hialeah.</p>
           <p>{content.socialHandle}</p>
         </div>
       </Container>

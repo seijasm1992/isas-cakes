@@ -13,55 +13,48 @@ function Stars({ count }) {
 }
 
 export default function Reviews({ content }) {
+  const featuredItems = content.items.slice(0, 3);
+  const trimQuote = (quote) => (quote.length > 180 ? `${quote.slice(0, 180).trimEnd()}...` : quote);
+
   return (
-    <section id="shop" className="relative bg-[var(--color-ink)] py-20 text-white sm:py-24 lg:py-28">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_28%)]" />
+    <section id="shop" className="relative bg-[var(--color-ink)] py-12 text-white sm:py-14 lg:py-16">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.07),_transparent_32%)]" />
       <Container className="relative z-10">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-white/78">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/78">
             {content.eyebrow}
           </span>
-          <h2 className="mt-6 text-3xl font-semibold leading-tight text-balance sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 text-2xl font-semibold leading-tight text-balance sm:text-[2rem] lg:text-[2.2rem]">
             {content.title}
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/68 sm:text-lg">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-white/68 sm:text-base">
             {content.description}
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {content.items.map((item) => (
+        <div className="mt-7 grid gap-4 md:grid-cols-3">
+          {featuredItems.map((item) => (
             <article
               key={item.id}
-              className="flex h-full flex-col rounded-[1.1rem] border border-white/10 bg-white/6 p-7 shadow-[0_20px_70px_rgba(0,0,0,0.18)] backdrop-blur-sm"
+              className="flex h-full min-h-[220px] flex-col rounded-xl border border-white/12 bg-white/8 p-4 shadow-[0_14px_40px_rgba(0,0,0,0.16)] backdrop-blur-sm"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-white">{item.author}</h3>
-                  <p className="mt-1 text-sm text-white/56">{item.meta}</p>
-                </div>
-                <span className="rounded-full border border-white/10 bg-white/8 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/62">
-                  {item.timeAgo}
-                </span>
+              <div>
+                <h3 className="text-sm font-semibold text-white">{item.author}</h3>
+                <p className="mt-1 text-[11px] text-white/56">{item.meta}</p>
               </div>
 
-              <div className="mt-5">
+              <div className="mt-3">
                 <Stars count={item.rating} />
               </div>
 
-              <p className="mt-5 flex-1 text-sm leading-7 text-white/76 sm:text-base">
-                {item.quote}
+              <p className="mt-3 flex-1 text-sm leading-6 text-white/72">
+                {trimQuote(item.quote)}
               </p>
 
-              <div className="mt-6 border-t border-white/10 pt-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]/85">
+              <div className="mt-4 border-t border-white/10 pt-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]/90">
                   {item.highlight}
                 </p>
-                {item.reply ? (
-                  <p className="mt-3 text-sm leading-7 text-white/58">
-                    <span className="font-semibold text-white/78">Owner reply:</span> {item.reply}
-                  </p>
-                ) : null}
               </div>
             </article>
           ))}

@@ -1,22 +1,82 @@
 ---
 import '../styles/global.css';
 
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  ogType?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const SITE_NAME = "Isa's Cakes";
+const DEFAULT_TITLE = "Isa's Cakes | Custom Designer Cakes in Miami";
+const DEFAULT_DESCRIPTION =
+  'Handcrafted custom cakes for birthdays, weddings, and celebrations in Miami. Premium designs with elegant finishes. Get a free quote today.';
+const DEFAULT_IMAGE = '/New%20folder/isas-cakes-pastry-chef-with-their-mermaid-tale-1.webp';
+
 const {
-  title = "Isa's Cakes | Designer Cakes",
-  description = 'Designer cakes and custom creations shaped with elegance, patience, and detail.',
+  title = DEFAULT_TITLE,
+  description = DEFAULT_DESCRIPTION,
+  image = DEFAULT_IMAGE,
+  ogType = 'website',
+  schema,
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://isascakes.com');
+const absoluteImageURL = new URL(image, Astro.site ?? 'https://isascakes.com').href;
+
+const schemaArray = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- SEO Core -->
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL.href} />
+
+    <!-- Google Fonts — Inter (preconnect + load) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Preconnect to external logo CDN -->
+    <link rel="preconnect" href="https://isascakes.com" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:image" content={absoluteImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteImageURL} />
+
+    <!-- JSON-LD Structured Data -->
+    {schemaArray.map((s) => (
+      <script type="application/ld+json" set:html={JSON.stringify(s)} />
+    ))}
   </head>
   <body>
     <a
